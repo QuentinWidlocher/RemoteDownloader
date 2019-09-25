@@ -10,40 +10,48 @@
     <link rel="stylesheet" href="{{url_for('static', filename='margin-helpers.css')}}">
 </head>
 <body>
-    <div class="container mt-5">
-        <table class="table is-fullwidth">
+    <div class="container mt-3">
+        <h1 class="is-size-3 has-text-primary">Remote Downloader</h1>
+        <form action="/add-url" method="post">
+            <div class="is-flex">
+                <input class="input is-medium is-primary" placeholder="Add an URL" type="text" name="url"
+                    id="input-url">
+                <button class="button is-medium is-primary ml-3" type="submit">Add URL</button>
+            </div>
+        </form>
+        <table class="table is-fullwidth mt-3">
             <thead>
                 <tr>
-                    <th>URL</th>
-                    <th>Status</th>
-                    <th></th>
+                    <td>Url</td>
+                    <td>Status</td>
+                    <td></td>
                 </tr>
             </thead>
-            <tbody id="table-body">
-            {% for row in downloads %}
+            <tbody>
+                {% for url in downloads %}
                 <tr>
-                    <td>{{row}}</td>
+                    <td class="is-family-monospace">{{url}}</td>
 
-                    {% if loop.index == 0 %}
-                    <td>Downloading</td> 
+                    {% if loop.index == 1 %}
+                    <td>
+                        <progress class="progress is-primary is-medium"></progress>
+                    </td>
                     {% else %}
-                    <td>Waiting</td>
+                    <td>
+                        <progress class="progress is-primary is-medium" value="0"></progress>
+                    </td>
                     {% endif %}
-                    
+
                     <td>
                         <form action="/delete-url" method="post">
-                            <input type="text" value="{{row}}" name="url" hidden>
+                            <input type="text" value="{{url}}" name="url" hidden>
                             <button type="submit" class="delete"></button>
                         </form>
                     </td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
-        <form class="is-inline-flex" action="/add-url" method="post">
-            <input class="input is-primary mr-2" placeholder="Add an URL" type="text" name="url" id="input-url">
-            <button class="button is-primary" type="submit">Add</button>
-        </form>
     </div>
 </body>
 </html>

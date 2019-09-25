@@ -61,6 +61,7 @@ def process_urls():
             downloads.remove(url)
 
 if __name__ == '__main__':
+
     # Prepare and run the downloading thread
     thread = Thread(target=process_urls)
     thread.daemon = True
@@ -68,5 +69,4 @@ if __name__ == '__main__':
 
     # Run the Flask server
     app.run(host='0.0.0.0', port=v.PORT)
-    
     thread.join()
