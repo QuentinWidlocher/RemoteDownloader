@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FileDownloader</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='margin-helpers.css')}}">
+</head>
+<body>
+    <div class="container mt-5">
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+            {% for row in rows %}
+                <tr>
+                    <td>{{row}}</td>
+
+                    {% if loop.index == 0 %}
+                    <td>Downloading</td> 
+                    {% else %}
+                    <td>Waiting</td>
+                    {% endif %}
+                    
+                    <td>
+                        <form action="/delete-url" method="post">
+                            <input type="text" value="{{row}}" name="url" hidden>
+                            <button type="submit" class="delete"></button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <form class="is-inline-flex" action="/add-url" method="post">
+            <input class="input is-primary mr-2" placeholder="Add an URL" type="text" name="url" id="input-url">
+            <button class="button is-primary" type="submit">Add</button>
+        </form>
+    </div>
+</body>
+</html>
