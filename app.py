@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_socketio import SocketIO
 import json
 from threading import Thread
 import requests
@@ -8,6 +9,9 @@ import variables as v
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['ENABLE_THREADS'] = True
+socketio = SocketIO(app)
+
+json_type = {"content-type": "application/json"}
 
 # List of queued downloads
 downloads = []
@@ -20,12 +24,14 @@ def index():
 # Add an url to the downloads
 @app.route('/add-url', methods=["POST"])
 def add_url():
-    url = request.form['url']
+    body = json.loads(request.data)
+    url = body['url']
 
     if not url in downloads:
         downloads.append(url)
-
-    return redirect(url_for('index'))
+        return '', 200
+    else:
+        return '', 500
 
 # Remove an url from the downloads
 @app.route('/delete-url', methods=["POST"])
@@ -68,5 +74,5 @@ if __name__ == '__main__':
     thread.start()
 
     # Run the Flask server
-    app.run(host='0.0.0.0', port=v.PORT)
+    socketio.run(app, host='0.0.0.0', port=v.PORT)
     thread.join()

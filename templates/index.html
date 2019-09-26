@@ -12,13 +12,11 @@
 <body>
     <div class="container mt-3">
         <h1 class="is-size-3 has-text-primary">Remote Downloader</h1>
-        <form action="/add-url" method="post">
             <div class="is-flex">
                 <input class="input is-medium is-primary" placeholder="Add an URL" type="text" name="url"
                     id="input-url">
-                <button class="button is-medium is-primary ml-3" type="submit">Add URL</button>
+                <button class="button is-medium is-primary ml-3" type="button" onclick="addURL()">Add URL</button>
             </div>
-        </form>
         <table class="table is-fullwidth mt-3">
             <thead>
                 <tr>
@@ -27,31 +25,33 @@
                     <td></td>
                 </tr>
             </thead>
-            <tbody>
-                {% for url in downloads %}
-                <tr>
-                    <td class="is-family-monospace">{{url}}</td>
-
-                    {% if loop.index == 1 %}
+            <tbody id="table">
+                <tr id="base-row" hidden>
+                    <td class="url is-family-monospace"></td>
                     <td>
                         <progress class="progress is-primary is-medium"></progress>
                     </td>
-                    {% else %}
                     <td>
-                        <progress class="progress is-primary is-medium" value="0"></progress>
+                        <input type="text" name="url" hidden>
+                        <button type="submit" class="delete"></button>
                     </td>
-                    {% endif %}
-
+                </tr>
+                {% for url in downloads %}
+                <tr>
+                    <td class="url is-family-monospace">{{url}}</td>
                     <td>
-                        <form action="/delete-url" method="post">
-                            <input type="text" value="{{url}}" name="url" hidden>
-                            <button type="submit" class="delete"></button>
-                        </form>
+                        <progress class="progress is-primary is-medium"></progress>
+                    </td>
+                    <td>
+                        <input type="text" name="url" hidden>
+                        <button type="submit" class="delete"></button>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <script src="{{url_for('static', filename='script.js')}}"></script>
 </body>
 </html>
